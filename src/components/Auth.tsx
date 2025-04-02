@@ -9,4 +9,3 @@ const loginToSpotify = () => {
 };
 
 export default loginToSpotify;
-// This is a placeholder component for authentication logic.

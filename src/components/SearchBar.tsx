@@ -1,14 +1,42 @@
-import { debounce } from 'lodash.debounce';
+import { DebouncedFunc } from 'lodash';
+import debounce from 'lodash.debounce';
+import { useEffect, useRef, useState } from 'react';
 
-interface Props {
+interface SearchBarProps {
     onSearch: (query: string) => void;
 }
 
-export const SearchBar: React.FC<Props> = ({ onSearch }) => {
-    const debouncedSearch = debounce((query: string) => {
-        onSearch(query);
-    }, 500);
+const SearchBar = ({ onSearch }: SearchBarProps) => {
+    const [inputValue, setInputValue] = useState<string>('');
+    const debounceRef = useRef<DebouncedFunc<(query: string) => void> | null>(null);
+
+    useEffect(() => {
+        debounceRef.current = debounce((query: string) => {
+            onSearch(query);
+        }, 500);
+
+        return () => {
+            debounceRef.current?.cancel();
+        };
+    }, [onSearch]);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target;
+        setInputValue(value);
+
+        if (debounceRef.current) {
+            debounceRef.current(value);
+        }
+    };
+
+    return (
+        <input
+            type="text"
+            value={inputValue}
+            onChange={handleInputChange}
+            placeholder='Buscar por artista, álbum ou música...'
+        />
+    );
 };
 
-
-// CORRIGIR O PROBLEMA DE TIPO DO DEBOUNCE
+export default SearchBar;
