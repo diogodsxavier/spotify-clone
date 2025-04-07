@@ -9,17 +9,16 @@ export const useAuth = () => {
         const accessToken = params.get("access_token");
 
         if (accessToken) {
-            localStorage.setItem("token", accessToken);
+            localStorage.setItem("spotify_token", accessToken);
             setToken(accessToken);
             window.history.replaceState({}, document.title, window.location.pathname);
         } else {
-            const storedToken = localStorage.getItem('spotify_token');
-            setToken(storedToken);
+            setToken(localStorage.getItem('spotify_token'));
         }
     }, []);
 
     const logout = () => {
-        localStorage.removeItem("token");
+        localStorage.removeItem("spotify_token");
         setToken(null);
     };
 
