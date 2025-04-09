@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import './App.css'
 import { ApiResponse, Track } from './types/spotify';
 import { useAuth } from './hooks/useAuth';
 import axios from 'axios';
@@ -22,9 +21,15 @@ function App() {
         `https://api.spotify.com/v1/search?q=${query}&type=track`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setTracks(response.data.tracks.items);
+      console.log(response.data);
+
+      //  Filtra músicas que possuem preview_url
+      const trackWithPreview = response.data.tracks.items.filter (
+        (track) => track.preview_url
+      )
+      setTracks(trackWithPreview);
     } catch (error) {
-      console.error('Erro no busca:', error);
+      console.error('Erro ao buscar músicas:', error);
     }
   };
 
@@ -56,11 +61,17 @@ function App() {
           <SearchBar onSearch={handleSearch} />
           <TrackList
             tracks={tracks}
-            onPlay={(url) => setCurrentTrack(url || '')}
+            onPlay={(url) => {
+              if (url) {
+                console.log('URL da música:', url);
+                setCurrentTrack(url);
+              } else {
+                console.warn('Esta música não possui uma prévia disponivel');
+              }
+            }}
           />
           <Player previewUrl={currentTrack} />
           {console.log(currentTrack)}
-          
         </>
       )}
     </div>
