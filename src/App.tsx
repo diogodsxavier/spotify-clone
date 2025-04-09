@@ -11,7 +11,7 @@ const SPOTIFY_CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
 
 function App() {
   const [tracks, setTracks] = useState<Track[]>([]);
-  const [currentTrack, setCurrentTrack] = useState<string | null>(null);
+  const [currentTrack, setCurrentTrack] = useState<string>('');
   const { token, logout } = useAuth();
 
   const handleSearch = async (query: string) => {
@@ -56,9 +56,11 @@ function App() {
           <SearchBar onSearch={handleSearch} />
           <TrackList
             tracks={tracks}
-            onPlay={setCurrentTrack}
+            onPlay={(url) => setCurrentTrack(url || '')}
           />
           <Player previewUrl={currentTrack} />
+          {console.log(currentTrack)}
+          
         </>
       )}
     </div>

@@ -17,13 +17,25 @@ const TrackList = ({ tracks, onPlay }: TrackListProps) => {
                     />
                     <div className="flex-1 ml-4">
                         <h3 className="text-lg font-semibold">{track.name}</h3>
-                        <p className="text-gray-600">{track.artists.map(artist => artist.name).join(", ")}</p>
+                        <p className="text-gray-600">{track.artists.map(artist => artist.name).join(', ')}</p>
+
                         <button
-                            onClick={() => onPlay(track.preview_url || "")}
+                            className={`px-4 py-2 text-white rounded-lg ${track.preview_url ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400'}`}
+                            onClick={() => {
+                                if (track.preview_url) {
+                                    onPlay(track.preview_url);
+                                }
+                            }}
                             disabled={!track.preview_url}
-                            className={`px-4 py-2 text-white rounded-lg ${track.preview_url ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400 cursor-not-allowed'}`}
                         >
                             ▶ Play
+                            {!track.preview_url && (
+                                <span
+                                    className="ml-2 text-gray-400"
+                                >
+                                    Preview não disponível
+                                </span>
+                            )}
                         </button>
                     </div>
                 </div>
