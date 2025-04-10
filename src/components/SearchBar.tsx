@@ -21,6 +21,7 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
         setInputValue(value);
+        console.log('Valor do input:', value);
         debounceRef.current?.(value); // Call the debounced function immediately on input change, This ensures that the search is triggered immediately when the user types
     };
 

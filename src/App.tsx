@@ -12,8 +12,10 @@ function App() {
   const [tracks, setTracks] = useState<Track[]>([]);
   const [currentTrack, setCurrentTrack] = useState<string>('');
   const { token, logout } = useAuth();
+  
 
   const handleSearch = async (query: string) => {
+    console.log("Token atual:", token);
     if (!token || !query) return;
 
     try {
@@ -21,15 +23,19 @@ function App() {
         `https://api.spotify.com/v1/search?q=${query}&type=track`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      console.log(response.data);
 
-      //  Filtra músicas que possuem preview_url
-      const trackWithPreview = response.data.tracks.items.filter (
-        (track) => track.preview_url
-      )
-      setTracks(trackWithPreview);
+      console.log("Resposta completa da API:", response.data);
+
+      // Não filtra mais por preview_url
+      const tracks = response.data.tracks.items;
+      console.log("Músicas retornadas:", tracks);
+      setTracks(tracks);
     } catch (error) {
-      console.error('Erro ao buscar músicas:', error);
+      if (axios.isAxiosError(error)) {
+        console.error("Erro ao buscar músicas:", error.response?.data || error.message);
+      } else {
+        console.error("Erro inesperado:", error);
+      }
     }
   };
 
@@ -72,6 +78,7 @@ function App() {
           />
           <Player previewUrl={currentTrack} />
           {console.log(currentTrack)}
+          
         </>
       )}
     </div>
