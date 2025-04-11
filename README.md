@@ -51,20 +51,6 @@ Passos para Implantação:
 
 Após o deploy, o Vercel fornecerá uma URL para acessar o projeto online.
 
-Estrutura do Projeto 📂
-
-src/
-├── components/
-│   ├── Player.tsx         # Componente para reprodução de prévias
-│   ├── SearchBar.tsx      # Componente de busca
-│   ├── TrackList.tsx      # Lista de músicas
-├── hooks/
-│   ├── useAuth.ts         # Hook para autenticação com Spotify
-├── types/
-│   ├── spotify.ts         # Tipos para a API do Spotify
-├── App.tsx                # Componente principal
-├── index.css              # Estilos globais com Tailwind CSS
-
 Melhorias Futuras 🌟
 
 Adicionar suporte para playlists.
