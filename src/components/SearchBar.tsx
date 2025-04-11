@@ -1,40 +1,37 @@
-import { useEffect, useRef, useState } from 'react';
-import debounce from 'lodash.debounce';
-import type { DebouncedFunc } from 'lodash';
+import { useState } from "react";
 
 interface SearchBarProps {
-    onSearch: (query: string) => void;
+  onSearch: (query: string) => void;
 }
 
 const SearchBar = ({ onSearch }: SearchBarProps) => {
-    const [inputValue, setInputValue] = useState<string>('');
-    const debounceRef = useRef<DebouncedFunc<(query: string) => void> | null>(null);
+  const [query, setQuery] = useState("");
 
-    useEffect(() => {
-        debounceRef.current = debounce(onSearch, 500); // Debounce the search function with a 500ms delay
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSearch(query);
+  };
 
-        return () => {
-            debounceRef.current?.cancel();
-        };
-    }, [onSearch]);
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { value } = e.target;
-        setInputValue(value);
-        console.log('Valor do input:', value);
-        debounceRef.current?.(value); // Call the debounced function immediately on input change, This ensures that the search is triggered immediately when the user types
-    };
-
-    return (
-        <input
-            type="text"
-            value={inputValue}
-            onChange={handleInputChange}
-            placeholder='Buscar por artista, álbum ou música...'
-            className='w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200'
-            autoComplete='off'
-        />
-    );
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="flex items-center gap-2 w-full bg-white p-4 rounded-lg shadow-md"
+    >
+      <input
+        type="text"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Buscar músicas..."
+        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      <button
+        type="submit"
+        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+      >
+        Buscar
+      </button>
+    </form>
+  );
 };
 
 export default SearchBar;

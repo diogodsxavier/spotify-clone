@@ -1,18 +1,21 @@
-import { useState } from 'react'
-import { ApiResponse, Track } from './types/spotify';
-import { useAuth } from './hooks/useAuth';
-import axios from 'axios';
-import SearchBar from './components/SearchBar';
-import Player from './components/Player';
-import TrackList from './components/TrackList';
+import { useState, useEffect } from "react";
+import { ApiResponse, Track } from "./types/spotify";
+import { useAuth } from "./hooks/useAuth";
+import axios from "axios";
+import SearchBar from "./components/SearchBar";
+import Player from "./components/Player";
+import TrackList from "./components/TrackList";
 
 const SPOTIFY_CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
 
 function App() {
   const [tracks, setTracks] = useState<Track[]>([]);
-  const [currentTrack, setCurrentTrack] = useState<string>('');
+  const [currentTrack, setCurrentTrack] = useState<string>("");
   const { token, logout } = useAuth();
-  
+
+  useEffect(() => {
+    localStorage.removeItem("spotify_token");
+  }, []);
 
   const handleSearch = async (query: string) => {
     console.log("Token atual:", token);
@@ -26,13 +29,15 @@ function App() {
 
       console.log("Resposta completa da API:", response.data);
 
-      // Não filtra mais por preview_url
       const tracks = response.data.tracks.items;
       console.log("Músicas retornadas:", tracks);
       setTracks(tracks);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error("Erro ao buscar músicas:", error.response?.data || error.message);
+        console.error(
+          "Erro ao buscar músicas:",
+          error.response?.data || error.message
+        );
       } else {
         console.error("Erro inesperado:", error);
       }
@@ -40,49 +45,55 @@ function App() {
   };
 
   const loginToSpotify = () => {
-    const redirectUri = encodeURIComponent('http://localhost:5173/callback');
-    const scopes = 'user-read-private user-read-email';
+    const redirectUri = encodeURIComponent("http://localhost:5173/callback");
+    const scopes = "user-read-private user-read-email";
 
-    window.location.href = `https://accounts.spotify.com/authorize?client_id=${SPOTIFY_CLIENT_ID}&redirect_uri=${redirectUri}&scope=${scopes}&response_type=token`;
+    const url = `https://accounts.spotify.com/authorize?client_id=${SPOTIFY_CLIENT_ID}&redirect_uri=${redirectUri}&scope=${scopes}&response_type=token`;
+    console.log("URL de autenticação:", url);
+
+    window.location.href = url;
   };
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100'>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 relative">
       {!token ? (
         <button
-          className='px-4 py-2 bg-green-500 text-white rounded-full font-bold text-lg transition duration-300 hover:bg-green-600'
+          className="px-4 py-2 bg-green-500 text-white rounded-full font-bold text-lg transition duration-300 hover:bg-green-600"
           onClick={loginToSpotify}
         >
           Login com Spotify
         </button>
       ) : (
         <>
-          <button
-            onClick={logout}
-            className='absolute top-4 right-4 px-4 py-2 bg-red-500 text-white rounded-full font-bold text-lg transition duration-300 hover:bg-red-600'
-          >
-            Logout
-          </button>
+          <div className="w-full max-w-md px-4 mt-8">
+            <SearchBar onSearch={handleSearch} />
+          </div>
 
-          <SearchBar onSearch={handleSearch} />
           <TrackList
             tracks={tracks}
             onPlay={(url) => {
               if (url) {
-                console.log('URL da música:', url);
                 setCurrentTrack(url);
               } else {
-                console.warn('Esta música não possui uma prévia disponivel');
+                console.warn("Esta música não possui uma prévia disponível.");
               }
             }}
           />
           <Player previewUrl={currentTrack} />
-          {console.log(currentTrack)}
-          
+
+          {/* Botão de logout reposicionado para o final da página em telas pequenas */}
+          <div className="mt-8 w-full flex justify-center mb-8">
+            <button
+              onClick={logout}
+              className="px-4 py-2 bg-red-500 text-white rounded-full font-bold text-sm md:text-lg transition duration-300 hover:bg-red-600"
+            >
+              Logout
+            </button>
+          </div>
         </>
       )}
     </div>
   );
 }
 
-export default App
+export default App;
