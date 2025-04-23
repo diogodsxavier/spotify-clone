@@ -45,7 +45,11 @@ function App() {
   };
 
   const loginToSpotify = () => {
-    const redirectUri = encodeURIComponent("http://localhost:5173/callback");
+    const redirectUri = encodeURIComponent(
+      import.meta.env.MODE === "production"
+        ? "https://spotify-clone-self-ten.vercel.app//callback"
+        : "http://localhost:5173/callback"
+    );
     const scopes = "user-read-private user-read-email";
 
     const url = `https://accounts.spotify.com/authorize?client_id=${SPOTIFY_CLIENT_ID}&redirect_uri=${redirectUri}&scope=${scopes}&response_type=token`;
