@@ -44,12 +44,22 @@ function App() {
     }
   };
 
+  // const loginToSpotify = () => {
+  //   const redirectUri = encodeURIComponent(
+  //     import.meta.env.MODE === "production"
+  //       ? "https://spotify-clone-self-ten.vercel.app/callback" // Domínio do Vercel
+  //       : "http://localhost:5173/callback" // Ambiente local
+  //   );
+  //   const scopes = "user-read-private user-read-email";
+
+  //   const url = `https://accounts.spotify.com/authorize?client_id=${SPOTIFY_CLIENT_ID}&redirect_uri=${redirectUri}&scope=${scopes}&response_type=token`;
+  //   console.log("URL de autenticação:", url);
+
+  //   window.location.href = url;
+  // };
+
   const loginToSpotify = () => {
-    const redirectUri = encodeURIComponent(
-      import.meta.env.MODE === "production"
-        ? "https://spotify-clone-self-ten.vercel.app/callback" // Domínio do Vercel
-        : "http://localhost:5173/callback" // Ambiente local
-    );
+    const redirectUri = encodeURIComponent(import.meta.env.VITE_SPOTIFY_REDIRECT_URI);
     const scopes = "user-read-private user-read-email";
 
     const url = `https://accounts.spotify.com/authorize?client_id=${SPOTIFY_CLIENT_ID}&redirect_uri=${redirectUri}&scope=${scopes}&response_type=token`;
@@ -57,7 +67,6 @@ function App() {
 
     window.location.href = url;
   };
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 relative">
       {!token ? (
