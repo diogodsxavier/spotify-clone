@@ -1,4 +1,4 @@
-import { HashRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ApiResponse, Track } from "./types/spotify";
 import { useAuth } from "./hooks/useAuth";
