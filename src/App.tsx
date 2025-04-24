@@ -14,7 +14,7 @@ function Callback() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const hash = window.location.hash.substring(1);
+    const hash = window.location.hash.substring(1); // Remove o '#' do início
     const params = new URLSearchParams(hash);
     const accessToken = params.get("access_token");
 
