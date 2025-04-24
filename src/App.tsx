@@ -14,16 +14,24 @@ function Callback() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("Callback iniciado");
+    console.log("Hash da URL:", window.location.hash);
+
     const hash = window.location.hash.substring(1); // Remove o '#' do início
     const params = new URLSearchParams(hash);
     const accessToken = params.get("access_token");
+
+    console.log("Token extraído:", accessToken);
 
     if (accessToken) {
       localStorage.setItem("spotify_token", accessToken);
       setToken(accessToken);
 
+      console.log("Token salvo no localStorage e estado atualizado");
+
       // Redireciona para a página principal
       navigate("/");
+      console.log("Redirecionando para a página principal");
     } else {
       console.error("Token de acesso não encontrado na URL.");
     }
@@ -37,15 +45,24 @@ function App() {
   const [currentTrack, setCurrentTrack] = useState<string>("");
   const { token, logout } = useAuth();
 
+  useEffect(() => {
+    console.log("Token atual no estado:", token);
+  }, [token]);
+
   const handleSearch = async (query: string) => {
-    if (!token || !query) return;
+    if (!token || !query) {
+      console.warn("Busca não realizada: token ou query ausente");
+      return;
+    }
 
     try {
+      console.log("Realizando busca por:", query);
       const response = await axios.get<ApiResponse>(
         `https://api.spotify.com/v1/search?q=${query}&type=track`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
+      console.log("Resposta da API do Spotify:", response.data);
       setTracks(response.data.tracks.items);
     } catch (error) {
       console.error("Erro ao buscar músicas:", error);
@@ -57,6 +74,8 @@ function App() {
     const scopes = "user-read-private user-read-email";
 
     const url = `https://accounts.spotify.com/authorize?client_id=${SPOTIFY_CLIENT_ID}&redirect_uri=${redirectUri}&scope=${scopes}&response_type=token`;
+    console.log("URL de autenticação gerada:", url);
+
     window.location.href = url;
   };
 
