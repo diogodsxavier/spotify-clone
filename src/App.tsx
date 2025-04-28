@@ -30,8 +30,10 @@ function Callback() {
       console.log("Token salvo no localStorage e estado atualizado");
 
       // Redireciona para a página principal
-      navigate("/");
-      console.log("Redirecionando para a página principal");
+      setTimeout(() => {
+        navigate("/");
+        console.log("Redirecionando para a página principal");
+      }, 500); // Pequeno atraso para garantir que o estado seja atualizado
     } else {
       console.error("Token de acesso não encontrado na URL.");
     }
