@@ -29,17 +29,22 @@ function Callback() {
 
       console.log("Token salvo no localStorage e estado atualizado");
 
-      // Redireciona para a página principal
-      setTimeout(() => {
-        navigate("/");
-        console.log("Redirecionando para a página principal");
-      }, 500); // Pequeno atraso para garantir que o estado seja atualizado
+      // Redireciona imediatamente para a página principal
+      navigate("/");
+      console.log("Redirecionando para a página principal");
     } else {
       console.error("Token de acesso não encontrado na URL.");
+      alert("Erro ao autenticar com o Spotify. Por favor, tente novamente.");
+      return;
     }
   }, [setToken, navigate]);
 
-  return <div>Redirecionando...</div>;
+  useEffect(() => {
+    console.log("Callback iniciado");
+    console.log("Hash da URL recebido:", window.location.hash);
+  });
+
+  return null; // Não renderiza nada
 }
 
 function App() {
@@ -51,6 +56,11 @@ function App() {
     console.log("Token atual no estado:", token);
   }, [token]);
 
+  useEffect(() => {
+    console.log("Token atual no estado:", token);
+  }, [token]);
+
+  // Função para buscar músicas na API do Spotify
   const handleSearch = async (query: string) => {
     if (!token || !query) {
       console.warn("Busca não realizada: token ou query ausente");
@@ -71,19 +81,18 @@ function App() {
     }
   };
 
+  // Função para redirecionar o usuário para a página de autenticação do Spotify
   const loginToSpotify = () => {
-    const redirectUri =
-      import.meta.env.MODE === "production"
-        ? "https://spotify-clone-self-ten.vercel.app/callback" // Ambiente de produção
-        : "http://localhost:5173/callback"; // Ambiente local
+    const redirectUri = "http://localhost:5173/callback"; // Ambiente local fixo
 
     const scopes = "user-read-private user-read-email";
 
     const url = `https://accounts.spotify.com/authorize?client_id=${SPOTIFY_CLIENT_ID}&redirect_uri=${encodeURIComponent(
       redirectUri
-    )}&scope=${scopes}&response_type=token`;
+    )}&scope=${encodeURIComponent(scopes)}&response_type=token`;
     console.log("URL de autenticação gerada:", url);
 
+    // Redireciona para a URL de autenticação do Spotify
     window.location.href = url;
   };
 

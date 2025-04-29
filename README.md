@@ -1,46 +1,23 @@
 # Spotify Clone 🎵
 
-Este é um projeto simplificado que replica funcionalidades inspiradas no Spotify. Desenvolvido para explorar a API oficial do Spotify, o projeto oferece uma interface responsiva que permite aos usuários realizar buscas e reproduzir prévias de músicas diretamente no navegador.
+Este é um projeto de clone do Spotify desenvolvido com React e a API do Spotify.
 
-## Funcionalidades 🚀
+## Funcionalidades
+- Login com Spotify via OAuth2.
+- Busca de músicas e artistas.
+- Player de pré-visualização.
 
-- **Autenticação com Spotify:**  
-  Login via OAuth 2.0 para acesso seguro à API do Spotify.
-  
-- **Busca de Músicas:**  
-  Pesquisa e filtragem de músicas utilizando dados em tempo real da API.
+## Tecnologias Utilizadas
+- React
+- React Router
+- Axios
+- API do Spotify
 
-- **Reprodução de Prévias:**  
-  Reprodução de trechos das músicas, diretamente no navegador.
-
-- **Interface Responsiva:**  
-  Layout adaptável para diferentes dispositivos e tamanhos de tela.
-
-- **Logout Simplificado:**  
-  Opção para sair da conta facilmente, especialmente otimizada para telas pequenas.
-
-## Tecnologias Utilizadas 🛠️
-
-- **React:** Biblioteca JavaScript para construir interfaces de usuário dinâmicas.
-- **TypeScript:** Superset do JavaScript que adiciona tipagem estática, melhorando a manutenção do código.
-- **Tailwind CSS:** Framework para estilização rápida e responsiva.
-- **Axios:** Biblioteca para realizar requisições HTTP de forma simplificada.
-- **Spotify Web API:** API oficial para integração com dados e funcionalidades do Spotify.
-- **Vercel:** Plataforma de deploy e hospedagem do projeto.
-
-## Como Executar o Projeto 🖥️
-
-### Pré-requisitos:
-- Node.js instalado na máquina.
-- Conta no [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/) para obter o Client ID.
-
-### Passos:
-
-1. **Clone o repositório:**
-    ```bash
-    git clone https://github.com/seu-usuario/spotify-clone.git
-    cd spotify-clone
-    ```
+## Como Executar
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/seu-usuario/spotify-clone.git
+   ```
 2. **Instale as dependências:**
     ```bash
     npm install
